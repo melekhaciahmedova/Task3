@@ -1,4 +1,11 @@
 
+using API.BLL.Abstract;
+using API.BLL.Concrete;
+using API.DAL.Abstract;
+using API.DAL.Concrete;
+using API.DAL.Database;
+using API.Mapper;
+
 namespace API
 {
     public class Program
@@ -13,7 +20,12 @@ namespace API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddDbContext<AppDbContext>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddAutoMapper(typeof(ProductProfile));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,7 +38,6 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
